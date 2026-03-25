@@ -6,3 +6,5 @@ export const messagesTable = pgTable("messages", {
   message: varchar().notNull(),
   ...timestamps,
 });
+
+export type InsertMessage = typeof messagesTable.$inferInsert;
