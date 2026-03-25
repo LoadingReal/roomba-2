@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { messagesTable, type InsertMessage } from "@/db/schema/messages.sql";
+import { messagesTable, type InsertMessage } from "@/db/schema/messages";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import * as z from "zod";

@@ -1,9 +1,12 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import v1 from "@/routes";
-import "dotenv/config"
+import "dotenv/config";
+import { corsMiddleware } from "@/middleware/cors";
 
 const app = new Hono();
+
+app.use("*", corsMiddleware);
 
 app.route("/v1", v1);
 
