@@ -4,12 +4,20 @@ import { authMiddleware } from "@/middleware/auth";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import * as z from "zod";
+import type { SessionType, UserType } from "@/db/schema";
 
-const messages = new Hono();
+type Variables = {
+  Variables: {
+    user: UserType | null;
+    session: SessionType | null;
+  };
+};
 
 const Messages = z.object({
   message: z.string(),
 });
+
+const messages = new Hono<Variables>();
 
 messages.get("/", (c) => {
   return c.json({
@@ -27,6 +35,7 @@ messages.post(
     const newMessage: InsertMessage = {
       message: validated.message,
     };
+
     await db.insert(messagesTable).values(newMessage);
 
     return c.json({
