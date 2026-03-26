@@ -10,7 +10,7 @@ export default function Home() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const data = {
+      const messageData = {
         message: message,
       };
       const response = await fetch(
@@ -21,10 +21,11 @@ export default function Home() {
             "Content-Type": "application/json",
           },
           credentials: "include",
-          body: JSON.stringify(data),
+          body: JSON.stringify(messageData),
         },
       );
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (e) {
       console.error("Failed to send message", e);
     }

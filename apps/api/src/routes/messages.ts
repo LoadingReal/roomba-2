@@ -31,9 +31,11 @@ messages.post(
   zValidator("json", Messages),
   authMiddleware,
   async (c) => {
+    const user = c.get("user")!;
     const validated = c.req.valid("json");
     const newMessage: InsertMessage = {
       message: validated.message,
+      userId: user.id,
     };
 
     await db.insert(messagesTable).values(newMessage);
