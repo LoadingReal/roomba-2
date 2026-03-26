@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { messagesTable, type InsertMessage } from "@/db/schema/messages";
+import { authMiddleware } from "@/middleware/auth";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import * as z from "zod";
@@ -17,18 +18,22 @@ messages.get("/", (c) => {
   });
 });
 
-messages.post("/add", zValidator("json", Messages), async (c) => {
-  const validated = c.req.valid("json");
-  const newMessage: InsertMessage = {
-    message: validated.message,
-  };
+messages.post(
+  "/add",
+  zValidator("json", Messages),
+  authMiddleware,
+  async (c) => {
+    const validated = c.req.valid("json");
+    const newMessage: InsertMessage = {
+      message: validated.message,
+    };
+    await db.insert(messagesTable).values(newMessage);
 
-  await db.insert(messagesTable).values(newMessage);
-
-  return c.json({
-    success: true,
-    validated,
-  });
-});
+    return c.json({
+      success: true,
+      validated,
+    });
+  },
+);
 
 export default messages;
