@@ -43,9 +43,14 @@ export const messagesRelations = relations(messagesTable, ({ one }) => ({
     fields: [messagesTable.userId],
     references: [user.id],
   }),
+  room: one(roomsTable, {
+    fields: [messagesTable.roomId],
+    references: [roomsTable.id],
+  }),
 }));
 
 export const roomsRelations = relations(roomsTable, ({ many }) => ({
+  messages: many(messagesTable),
   usersToRooms: many(usersToRooms),
 }));
 

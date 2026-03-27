@@ -1,12 +1,14 @@
 import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
 import { timestamps } from "@/db/schema/columns.helpers.ts";
 import { user } from "@/db/schema/auth-schema";
+import { roomsTable } from "./rooms";
 
 export const messagesTable = pgTable("messages", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
+  roomId: text("room_id").references(() => roomsTable.id),
   message: varchar("message").notNull(),
   ...timestamps,
 });
