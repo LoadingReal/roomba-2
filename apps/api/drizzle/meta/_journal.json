@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1774543413026,
-      "tag": "0000_plain_ben_parker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1774595351924,
-      "tag": "0001_volatile_matthew_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1774595617518,
-      "tag": "0002_curved_goblin_queen",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1774601199561,
-      "tag": "0003_handy_tiger_shark",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1774603163338,
-      "tag": "0004_lovely_orphan",
+      "when": 1774604490246,
+      "tag": "0000_outgoing_jamie_braddock",
       "breakpoints": true
     }
   ]

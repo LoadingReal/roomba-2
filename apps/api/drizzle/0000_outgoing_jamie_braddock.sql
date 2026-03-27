@@ -48,15 +48,28 @@ CREATE TABLE "verification" (
 --> statement-breakpoint
 CREATE TABLE "messages" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "messages_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"userId" text NOT NULL,
+	"user_id" text NOT NULL,
 	"message" varchar NOT NULL,
 	"updated_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp
 );
 --> statement-breakpoint
+CREATE TABLE "users_to_rooms" (
+	"user_id" text NOT NULL,
+	"room_id" text NOT NULL,
+	CONSTRAINT "users_to_rooms_user_id_room_id_pk" PRIMARY KEY("user_id","room_id")
+);
+--> statement-breakpoint
+CREATE TABLE "rooms" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL
+);
+--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users_to_rooms" ADD CONSTRAINT "users_to_rooms_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "users_to_rooms" ADD CONSTRAINT "users_to_rooms_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");

@@ -2,10 +2,12 @@ import { relations } from "drizzle-orm";
 import { account, session, user } from "@/db/schema/auth-schema";
 import { roomsTable } from "@/db/schema/rooms";
 import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { messagesTable } from "@/db/schema/messages";
 
 export const userRelations = relations(user, ({ many }) => ({
-  sessions: many(session),
   accounts: many(account),
+  messages: many(messagesTable),
+  sessions: many(session),
   usersToRooms: many(usersToRooms),
 }));
 
@@ -35,6 +37,13 @@ export const usersToRooms = pgTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.roomId] })],
 );
+
+export const messagesRelations = relations(messagesTable, ({ one }) => ({
+  user: one(user, {
+    fields: [messagesTable.userId],
+    references: [user.id],
+  }),
+}));
 
 export const roomsRelations = relations(roomsTable, ({ many }) => ({
   usersToRooms: many(usersToRooms),
