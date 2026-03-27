@@ -1,3 +1,10 @@
+import { db } from "@/db";
+import {
+  roomsTable,
+  usersToRooms,
+  type InsertRoom,
+  type InsertUsersToRooms,
+} from "@/db/schema";
 import { authMiddleware } from "@/middleware/auth";
 import type { Variables } from "@/types";
 import { zValidator } from "@hono/zod-validator";
@@ -24,10 +31,29 @@ rooms.post(
   async (c) => {
     const user = c.get("user")!;
     const validated = c.req.valid("json");
-    console.log(`${user.name}: ${validated.name}`);
+    const newRoom: InsertRoom = {
+      name: validated.name,
+    };
+
+    const result = await db.transaction(async (tx) => {
+      const [newRoomResult] = await tx
+        .insert(roomsTable)
+        .values(newRoom)
+        .returning();
+
+      const joinRoom: InsertUsersToRooms = {
+        roomId: newRoomResult.id,
+        userId: user.id,
+      };
+
+      await tx.insert(usersToRooms).values(joinRoom);
+
+      return newRoomResult;
+    });
+
     return c.json({
       success: true,
-      message: "Successfully created room",
+      result,
     });
   },
 );

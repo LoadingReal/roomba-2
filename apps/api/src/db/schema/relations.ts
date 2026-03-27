@@ -50,3 +50,5 @@ export const usersToRoomsRelations = relations(usersToRooms, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export type InsertUsersToRooms = typeof usersToRooms.$inferInsert;
