@@ -1,11 +1,12 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { authClient, signInWithGoogle, signOutWithGoogle } from "./lib/auth";
+import { authClient, signInWithGoogle, signOutWithGoogle } from "@/lib/auth";
 
 export default function Home() {
   const { data: session } = authClient.useSession();
   const [message, setMessage] = useState<string>("");
+  const [roomName, setRoomName] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,6 +32,30 @@ export default function Home() {
     }
   };
 
+  const handleCreateRoom = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const roomData = {
+        name: roomName,
+      };
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/rooms/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(roomData),
+        },
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (e) {
+      console.error("Failed to create room", e);
+    }
+  };
+
   return (
     <div>
       {session ? (
@@ -39,6 +64,10 @@ export default function Home() {
         <button onClick={signInWithGoogle}>Sign in with Google</button>
       )}
       <h1>Hi</h1>
+      <form onSubmit={handleCreateRoom}>
+        <input type="text" onChange={(e) => setRoomName(e.target.value)} />
+        <button type="submit">Create Room</button>
+      </form>
       <form onSubmit={handleSubmit}>
         <input type="text" onChange={(e) => setMessage(e.target.value)} />
         <button type="submit">Send</button>

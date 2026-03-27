@@ -4,17 +4,10 @@ import { authMiddleware } from "@/middleware/auth";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import * as z from "zod";
-import type { SessionType, UserType } from "@/db/schema";
-
-type Variables = {
-  Variables: {
-    user: UserType | null;
-    session: SessionType | null;
-  };
-};
+import type { Variables } from "@/types";
 
 const Messages = z.object({
-  message: z.string(),
+  message: z.string().min(1),
 });
 
 const messages = new Hono<Variables>();
@@ -28,8 +21,8 @@ messages.get("/", (c) => {
 
 messages.post(
   "/add",
-  zValidator("json", Messages),
   authMiddleware,
+  zValidator("json", Messages),
   async (c) => {
     const user = c.get("user")!;
     const validated = c.req.valid("json");
