@@ -1,8 +1,8 @@
-import { integer, pgTable, text } from "drizzle-orm/pg-core";
+  import { pgTable, text } from "drizzle-orm/pg-core";
 
-export const roomsTable = pgTable("rooms", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: text().notNull(),
-});
+  export const roomsTable = pgTable("rooms", {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+  });
 
-export type InsertRoom = typeof roomsTable.$inferInsert;
+  export type InsertRoom = typeof roomsTable.$inferInsert;

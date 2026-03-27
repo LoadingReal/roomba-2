@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { account, session, user } from "@/db/schema/auth-schema";
 import { roomsTable } from "@/db/schema/rooms";
-import { integer, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { pgTable, primaryKey, text } from "drizzle-orm/pg-core";
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
@@ -26,10 +26,10 @@ export const accountRelations = relations(account, ({ one }) => ({
 export const usersToRooms = pgTable(
   "users_to_rooms",
   {
-    userId: text()
+    userId: text("user_id")
       .notNull()
       .references(() => user.id),
-    roomId: integer()
+    roomId: text("room_id")
       .notNull()
       .references(() => roomsTable.id),
   },
