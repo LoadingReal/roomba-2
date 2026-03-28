@@ -6,9 +6,7 @@ import { corsMiddleware } from "@/middleware/cors";
 
 const app = new Hono();
 
-app.use("*", corsMiddleware);
-
-app.route("/v1", v1);
+const appRoutes = app.use("*", corsMiddleware).route("/v1", v1);
 
 serve(
   {
@@ -19,3 +17,7 @@ serve(
     console.log(`Server is running on http://localhost:${info.port}`);
   },
 );
+
+export default app;
+
+export type AppRoutes = typeof appRoutes;

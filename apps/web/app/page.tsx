@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { authClient, signInWithGoogle, signOutWithGoogle } from "@/lib/auth";
+import { apiClient } from "@/lib/hc";
 
 export default function Home() {
   const { data: session } = authClient.useSession();
@@ -14,17 +15,9 @@ export default function Home() {
       const messageData = {
         message: message,
       };
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/messages/add`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(messageData),
-        },
-      );
+      const response = await apiClient.messages.add.$post({
+        json: messageData,
+      });
       const data = await response.json();
       console.log(data);
     } catch (e) {
@@ -38,17 +31,9 @@ export default function Home() {
       const roomData = {
         name: roomName,
       };
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/rooms/create`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(roomData),
-        },
-      );
+      const response = await apiClient.rooms.create.$post({
+        json: roomData,
+      });
       const data = await response.json();
       console.log(data);
     } catch (e) {

@@ -9,7 +9,7 @@
     "strictNullChecks": true,
     "paths": {
       "@/*": [
-        "./app/*"
+        "./app/*", "../api/src/*"
       ]
     }
   },

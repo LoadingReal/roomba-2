@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@repo/api",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -16,6 +16,9 @@
     "pg": "^8.20.0",
     "postgres": "^3.4.8",
     "zod": "^4.3.6"
+  },
+  "exports": {
+    ".": "./src/*"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
