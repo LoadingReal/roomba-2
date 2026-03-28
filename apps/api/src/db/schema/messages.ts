@@ -1,5 +1,5 @@
 import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
-import { timestamps } from "@/db/schema/columns.helpers.ts";
+import { timestamps } from "@/db/schema/columns.helpers";
 import { user } from "@/db/schema/auth-schema";
 import { roomsTable } from "./rooms";
 
