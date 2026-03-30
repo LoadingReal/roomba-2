@@ -14,7 +14,6 @@ export const authMiddleware = createMiddleware<Variables>(async (c, next) => {
         success: false,
         message: "Not signed in",
       },
-      401,
     );
   }
 

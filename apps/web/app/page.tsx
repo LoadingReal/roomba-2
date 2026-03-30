@@ -1,13 +1,32 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { authClient, signInWithGoogle, signOutWithGoogle } from "@/lib/auth";
 import { apiClient } from "@/lib/hc";
+import { Room } from "@/types/rooms";
 
 export default function Home() {
   const { data: session } = authClient.useSession();
   const [message, setMessage] = useState<string>("");
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [roomName, setRoomName] = useState<string>("");
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const roomsResponse = await apiClient.rooms.$get();
+        const roomsResult = await roomsResponse.json();
+
+        if (roomsResult.success) {
+          setRooms(roomsResult.rooms);
+        }
+      };
+
+      fetchData();
+    } catch (err) {
+      console.error("Failed to fetch data", err);
+    }
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -57,6 +76,14 @@ export default function Home() {
         <input type="text" onChange={(e) => setMessage(e.target.value)} />
         <button type="submit">Send</button>
       </form>
+      <div>
+        {rooms.map((room) => (
+          <div key={room.id}>
+            <span>ID: {room.id}</span>
+            <span>{room.name}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

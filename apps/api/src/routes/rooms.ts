@@ -9,6 +9,7 @@ import { authMiddleware } from "@/middleware/auth";
 import type { Variables } from "@/types";
 import { generateUniqueRoomId } from "@/utils/math";
 import { zValidator } from "@hono/zod-validator";
+import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import z from "zod";
 
@@ -18,10 +19,21 @@ const CreateRoom = z.object({
 
 const rooms = new Hono<Variables>()
 
-  .get("/", (c) => {
+  .get("/", authMiddleware, async (c) => {
+    const user = c.get("user")!;
+
+    const userRooms = await db
+      .select({
+        id: roomsTable.id,
+        name: roomsTable.name,
+      })
+      .from(roomsTable)
+      .innerJoin(usersToRooms, eq(roomsTable.id, usersToRooms.roomId))
+      .where(eq(usersToRooms.userId, user.id));
+
     return c.json({
       success: true,
-      message: "Rooms route",
+      rooms: userRooms,
     });
   })
 
