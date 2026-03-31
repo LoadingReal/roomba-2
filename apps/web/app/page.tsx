@@ -12,6 +12,11 @@ export default function Home() {
   const [roomName, setRoomName] = useState<string>("");
 
   useEffect(() => {
+    if (!session) {
+      setRooms([]);
+      return;
+    }
+
     try {
       const fetchData = async () => {
         const roomsResponse = await apiClient.rooms.$get();
@@ -26,7 +31,7 @@ export default function Home() {
     } catch (err) {
       console.error("Failed to fetch data", err);
     }
-  }, []);
+  }, [session]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -63,22 +68,43 @@ export default function Home() {
   return (
     <div>
       {session ? (
-        <button onClick={signOutWithGoogle}>Sign out</button>
+        <button className="btn btn-soft btn-error" onClick={signOutWithGoogle}>
+          Sign out
+        </button>
       ) : (
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
+        <button className="btn btn-primary" onClick={signInWithGoogle}>
+          Sign in with Google
+        </button>
       )}
       <h1>Hi</h1>
       <form onSubmit={handleCreateRoom}>
-        <input type="text" onChange={(e) => setRoomName(e.target.value)} />
-        <button type="submit">Create Room</button>
+        <input
+          type="text"
+          className="input"
+          placeholder="Room name"
+          onChange={(e) => setRoomName(e.target.value)}
+        />
+        <button type="submit" className="btn btn-primary">
+          Create Room
+        </button>
       </form>
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={(e) => setMessage(e.target.value)} />
-        <button type="submit">Send</button>
+        <input
+          type="text"
+          className="input"
+          placeholder="Message"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button type="submit" className="btn btn-primary">
+          Send
+        </button>
       </form>
-      <div>
+      <div className="flex flex-col gap-2">
         {rooms.map((room) => (
-          <div key={room.id}>
+          <div
+            key={room.id}
+            className="border-primary flex flex-col rounded-md border p-2"
+          >
             <span>ID: {room.id}</span>
             <span>{room.name}</span>
           </div>
