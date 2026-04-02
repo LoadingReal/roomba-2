@@ -1,6 +1,6 @@
 import { cors } from "hono/cors";
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = [process.env.CLIENT_URL!];
 
 export const corsMiddleware = cors({
   origin: allowedOrigins,

@@ -11,7 +11,7 @@ const v1 = new Hono()
       message: "Hello Hono!",
     });
   })
-  .route("/api", auth)
+  .route("/api/auth", auth)
   .route("/messages", messages)
   .route("/rooms", rooms)
   .route("/test", test);
