@@ -13,5 +13,11 @@ export const signInWithGoogle = async () => {
 };
 
 export const signOutWithGoogle = async () => {
-  await authClient.signOut();
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        window.location.href = "/auth";
+      },
+    },
+  });
 };
