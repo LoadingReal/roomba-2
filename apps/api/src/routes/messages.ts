@@ -8,6 +8,7 @@ import type { Variables } from "@/types";
 
 const Messages = z.object({
   message: z.string().min(1),
+  roomId: z.string(),
 });
 
 const messages = new Hono<Variables>()
@@ -22,17 +23,28 @@ const messages = new Hono<Variables>()
   .post("/add", authMiddleware, zValidator("json", Messages), async (c) => {
     const user = c.get("user")!;
     const validated = c.req.valid("json");
+
     const newMessage: InsertMessage = {
       message: validated.message,
       userId: user.id,
+      roomId: validated.roomId,
     };
 
-    await db.insert(messagesTable).values(newMessage);
+    try {
+      const [inserted] = await db
+        .insert(messagesTable)
+        .values(newMessage)
+        .returning();
 
-    return c.json({
-      success: true,
-      validated,
-    });
+      return c.json({
+        success: true,
+        message: "Message sent!",
+        data: inserted,
+      });
+    } catch (error) {
+      console.error("Database error:", error);
+      return c.json({ success: false, error: "Failed to save message" }, 500);
+    }
   });
 
 export default messages;
