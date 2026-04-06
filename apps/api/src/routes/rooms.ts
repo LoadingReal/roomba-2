@@ -1,18 +1,18 @@
-import { db } from "@/db";
+import { db } from "../db";
 import {
   roomsTable,
   usersToRooms,
   type InsertRoom,
   type InsertUsersToRooms,
-} from "@/db/schema";
-import { authMiddleware } from "@/middleware/auth";
-import type { Variables } from "@/types";
-import { generateUniqueRoomId } from "@/utils/math";
+} from "../db/schema";
+import { authMiddleware } from "../middleware/auth";
+import type { Variables } from "../types";
+import { generateUniqueRoomId } from "../utils/math";
 import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import z from "zod";
-import messages from "@/routes/messages";
+import messages from "./messages";
 
 const CreateRoom = z.object({
   name: z.string().min(1, { error: "Too short" }),
@@ -20,7 +20,7 @@ const CreateRoom = z.object({
 
 const rooms = new Hono<Variables>()
 
-  // .route("/:roomId", messages)
+  .route("/:roomId", messages)
 
   .get("/", authMiddleware, async (c) => {
     const user = c.get("user")!;
@@ -74,15 +74,6 @@ const rooms = new Hono<Variables>()
         result,
       });
     },
-  )
-
-  .post("/:roomId/add", authMiddleware, (c) => {
-    const roomId = c.req.param("roomId");
-    return c.json({
-      success: true,
-      message: "Create message inside room route",
-      roomId,
-    });
-  });
+  );
 
 export default rooms;

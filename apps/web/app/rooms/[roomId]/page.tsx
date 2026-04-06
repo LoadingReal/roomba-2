@@ -11,8 +11,9 @@ export default function RoomChatPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await apiClient.messages.add.$post({
-        json: { message, roomId: roomId as string },
+      const response = await apiClient.rooms[":roomId"].add.$post({
+        json: { message },
+        param: { roomId: roomId as string },
       });
       console.log("Message sent!");
       setMessage("");

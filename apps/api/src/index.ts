@@ -1,12 +1,6 @@
-import { serve } from "@hono/node-server";
-import { Hono } from "hono";
-import v1 from "@/routes";
 import "dotenv/config";
-import { corsMiddleware } from "@/middleware/cors";
-
-const app = new Hono();
-
-const appRoutes = app.use("*", corsMiddleware).route("/v1", v1);
+import { serve } from "@hono/node-server";
+import { app } from "@/app";
 
 serve(
   {
@@ -18,6 +12,4 @@ serve(
   },
 );
 
-export default app;
-
-export type AppRoutes = typeof appRoutes;
+export type { AppType } from "@/app";

@@ -1,8 +1,8 @@
 import { Hono } from "hono";
-import messages from "@/routes/messages";
-import auth from "@/routes/auth";
-import rooms from "@/routes/rooms";
-import test from "@/routes/test";
+import messages from "./messages";
+import auth from "./auth";
+import rooms from "./rooms";
+import test from "./test";
 
 const v1 = new Hono()
   .get("/", (c) => {

@@ -2,7 +2,7 @@
 
 import { authClient } from "@/lib/auth";
 import { apiClient } from "@/lib/hc";
-import { Room } from "@/types/rooms";
+import { GetRoomsResponse, Room } from "@/types/rooms";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -22,10 +22,10 @@ const Sidebar = () => {
     const fetchData = async () => {
       try {
         const roomsResponse = await apiClient.rooms.$get();
-        const roomsResult = await roomsResponse.json();
+        const roomsResult: GetRoomsResponse = await roomsResponse.json();
 
         if (roomsResult.success) {
-          setRooms((roomsResult as any).rooms);
+          setRooms(roomsResult.rooms);
         }
       } catch (err) {
         console.error("Failed to fetch data", err);
