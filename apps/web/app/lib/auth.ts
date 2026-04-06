@@ -7,8 +7,8 @@ export const authClient = createAuthClient({
 export const signInWithGoogle = async () => {
   return await authClient.signIn.social({
     provider: "google",
-    callbackURL: process.env.NEXT_PUBLIC_CLIENT_URL,
-    errorCallbackURL: process.env.NEXT_PUBLIC_CLIENT_URL,
+    callbackURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/rooms`,
+    errorCallbackURL: `${process.env.NEXT_PUBLIC_CLIENT_URL}/auth`,
   });
 };
 

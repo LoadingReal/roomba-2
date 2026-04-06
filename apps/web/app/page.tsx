@@ -1,37 +1,14 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { authClient, signInWithGoogle, signOutWithGoogle } from "@/lib/auth";
 import { apiClient } from "@/lib/hc";
-import { Room } from "@/types/rooms";
+import Sidebar from "@/components/sidebar";
 
 export default function Home() {
   const { data: session } = authClient.useSession();
   const [message, setMessage] = useState<string>("");
-  const [rooms, setRooms] = useState<Room[]>([]);
   const [roomName, setRoomName] = useState<string>("");
-
-  useEffect(() => {
-    if (!session) {
-      setRooms([]);
-      return;
-    }
-
-    try {
-      const fetchData = async () => {
-        const roomsResponse = await apiClient.rooms.$get();
-        const roomsResult = await roomsResponse.json();
-
-        if (roomsResult.success) {
-          setRooms(roomsResult.rooms);
-        }
-      };
-
-      fetchData();
-    } catch (err) {
-      console.error("Failed to fetch data", err);
-    }
-  }, [session]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -67,6 +44,7 @@ export default function Home() {
 
   return (
     <div>
+      <Sidebar />
       {session ? (
         <button className="btn btn-soft btn-error" onClick={signOutWithGoogle}>
           Sign out
@@ -99,17 +77,6 @@ export default function Home() {
           Send
         </button>
       </form>
-      <div className="flex flex-col gap-2">
-        {rooms.map((room) => (
-          <div
-            key={room.id}
-            className="border-primary flex flex-col rounded-md border p-2"
-          >
-            <span>ID: {room.id}</span>
-            <span>{room.name}</span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
